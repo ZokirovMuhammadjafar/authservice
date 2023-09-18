@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-
 public class AuthControllerImpl extends AbstractController<AuthService> implements AuthController {
     protected AuthControllerImpl(AuthService abstractService) {
         super(abstractService, AuthController.class);
@@ -19,6 +18,7 @@ public class AuthControllerImpl extends AbstractController<AuthService> implemen
 
 
     @Override
+
     public AbstractResponse<ALoginRP> login(ALoginRQ login) {
         ALoginRP response = abstractService.login(login);
         return AbstractResponse.of(response);

@@ -12,5 +12,4 @@ public class ALoginRQ implements Request {
     private String password;
     private Scope scope = Scope.DEFAULT;
 
-
 }

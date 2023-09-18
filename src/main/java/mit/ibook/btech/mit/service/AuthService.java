@@ -1,6 +1,7 @@
 package mit.ibook.btech.mit.service;
 
 import com.auth0.jwt.JWT;
+import jdk.jfr.Label;
 import lombok.RequiredArgsConstructor;
 import mit.ibook.btech.mit.dto.auth.request.ALoginRQ;
 import mit.ibook.btech.mit.dto.auth.response.ALoginRP;
@@ -8,6 +9,7 @@ import mit.ibook.btech.mit.entity.Users;
 import mit.ibook.btech.mit.exceptions.RestException;
 import mit.ibook.btech.mit.repository.AuthRepository;
 import mit.ibook.btech.mit.utils.JWTUtil;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,12 +24,17 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service("authService")
-@RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
 
     private final AuthRepository authRepository;
     private final AuthenticationManager authenticationManager;
     private final JWTUtil util;
+
+    public AuthService(AuthRepository authRepository, @Lazy AuthenticationManager authenticationManager, JWTUtil util) {
+        this.authRepository = authRepository;
+        this.authenticationManager = authenticationManager;
+        this.util = util;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -52,6 +59,7 @@ public class AuthService implements UserDetailsService {
         aLoginRP.setRefreshToken(refreshToken(login.getUsername()));
         aLoginRP.setExpiresIn(util.getExpireDate().getTime());
         aLoginRP.setRefreshTokenExpire(util.getExpireDateForRefreshToken().getTime());
+        aLoginRP.setTokenType("Bearer");
         return aLoginRP;
     }
 

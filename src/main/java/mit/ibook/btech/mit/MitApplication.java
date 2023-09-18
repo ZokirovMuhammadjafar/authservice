@@ -35,12 +35,18 @@ public class MitApplication implements CommandLineRunner {
 //        userRole.setName("admin");
 //        userRole.setPermissions(List.of("ADMIN"));
 //        Users users=new Users();
-//        users.setEnable(true);
+//        users.setActived(true);
+//        users.setEmail("ibook@gmail.com");
+//        users.setFirstName("Muhammadjafar");
+//        users.setLastName("Zokirov");
+//        users.setMiddleName("Mutalib");
+//        users.setPhone("998946753336");
+//        users.setRegionId(1L);
 //        users.setUserRoles(List.of(roleRepository.save(userRole)));
 //        users.setPassword(encoder.encode("123456"));
 //        users.setUsername("admin");
 //        authRepository.save(users);
-
-        System.out.println(this.encoder.encode("123456"));
+//
+//        System.out.println(this.encoder.encode("123456"));
     }
 }
