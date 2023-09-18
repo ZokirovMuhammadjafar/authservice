@@ -3,16 +3,15 @@ package mit.ibook.btech.mit.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import mit.ibook.btech.mit.dto.base.Scope;
+import mit.ibook.btech.mit.exceptions.RestException;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -60,7 +59,7 @@ public class Users implements UserDetails {
     private Audited audited;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public List<? extends GrantedAuthority> getAuthorities() {
         Set<String> permission = new HashSet<>();
         this.userRoles.forEach(a -> permission.addAll(a.getPermissions()));
         return permission.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
@@ -94,5 +93,39 @@ public class Users implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.actived;
+    }
+
+    public Map<String, String> getClaimsByScope(Scope scope) {
+        Map<String,String>claims=new HashMap<>();
+        switch (scope){
+            case PROFILE -> {
+               claims.put("username",this.username);
+               claims.put("id",this.id.toString());
+               claims.put("firstName",this.firstName);
+               claims.put("lastName",this.lastName);
+               claims.put("middleName",this.middleName);
+               claims.put("phone",this.phone);
+               claims.put("email",this.email);
+               claims.put("regionId",this.regionId.toString());
+               claims.put("userRoles",this.getAuthorities().toString());
+            }
+            case BEARER -> {
+                claims.put("username",this.username);
+                claims.put("id",this.id.toString());
+                claims.put("userRoles",this.getAuthorities().toString());
+            }
+            case DEFAULT -> {
+                claims.put("username",this.username);
+                claims.put("id",this.id.toString());
+                claims.put("userRoles",this.getAuthorities().toString());
+                claims.put("firstName",this.firstName);
+                claims.put("lastName",this.lastName);
+                claims.put("middleName",this.middleName);
+                claims.put("phone",this.phone);
+                claims.put("regionId",this.regionId.toString());
+            }
+            default -> throw new RestException("Unexpected value: ");
+        }
+        return claims;
     }
 }

@@ -16,3 +16,14 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
     cache: false
+
+
+# jwt configuration elements
+jwt:
+  expire: 600000
+  #  expire: 300
+  refresh_expire: 864000000
+  #  refresh_expire: 600000
+  secret: 'gfhg4561967$%#%$%^?>?>:gjhgsdfsd?>jahdqpdsdhgf'
+  issuer_access: 'Men1ng $eviml1 0yinim Asph@lt'
+  issuer_refresh: 'Uzc@rd b1rinch1 t0l0v tiz1mi'
